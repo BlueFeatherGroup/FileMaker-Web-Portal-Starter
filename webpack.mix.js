@@ -16,8 +16,18 @@ mix.js('resources/js/app.js', 'public/js').vue()
         require('postcss-import'),
         require('tailwindcss'),
     ])
-    .webpackConfig(require('./webpack.config'));
+    .webpackConfig(require('./webpack.config'))
+    .extract(['vue'])
+;
 
 if (mix.inProduction()) {
     mix.version();
+} else {
+    mix.sourceMaps();
+    mix.options({processCssUrls: false});
+    //mix.extract();
+    mix.browserSync({
+        proxy: process.env.APP_URL,
+        https: process.env.BROWSERSYNC_HTTPS || false
+    });
 }
