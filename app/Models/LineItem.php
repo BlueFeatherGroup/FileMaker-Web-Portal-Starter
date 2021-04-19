@@ -9,7 +9,12 @@ class LineItem extends FMModel
 {
     use HasFactory;
 
-    protected $layout = 'lineitems';
+    protected $layout = 'invoicedata';
     protected $keyType = 'string';
+
+    protected $fieldMapping = [
+        'INVOICE ID MATCH FIELD' => 'invoice_id',
+        'Unit Price' => 'unit_price',
+    ];
 
 }

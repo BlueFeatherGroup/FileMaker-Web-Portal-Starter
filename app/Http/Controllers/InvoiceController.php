@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaymentAlert;
 use App\Mail\Receipt;
-use App\Models\Client;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\User;
 use BlueFeather\EloquentFileMaker\Support\Facades\FM;
@@ -14,58 +14,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
     public function get(string $id)
     {
-        $clientId = Auth::user()->client_id;
-        $client = Client::find($clientId);
 
         // find the invoice or return a 404
         $invoice = Invoice::where('id', $id)->firstOrFail();
 
-        $unprocessedLines = Cache::remember('invoice-' . $invoice->id . '-lineitems', 600, function () use ($invoice) {
-            return $invoice->lineItems()->orderBy('project')->orderBy('description')->orderBy('date')->get();
-        });
+        $customer_id = Auth::user()->customer_id;
+        $customer = Customer::find($customer_id);
 
-        // combine lineitems with the same description so we have fewer repeated lines
-        $lineItems = [];
-        $lastDescription = null;
-        $lastProject = null;
-        foreach ($unprocessedLines as $eachLine) {
-            // make a new line item if the description is different from the last item
-            $thisLine = [
-                'description' => $eachLine->description,
-                'date' => $eachLine->date,
-                'qty' => $eachLine->qty,
-                'amount' => $eachLine->amount_c,
-                'project' => $eachLine->project,
-            ];
-
-            if ($eachLine->description === $lastDescription && $eachLine->project === $lastProject) {
-                // This line has the same project and description as the last line. We should combine the totals and update the existing line
-
-                // Keep track of the size of the current array so we know where to update
-                $index = sizeof($lineItems) - 1;
-
-                $thisLine['qty'] = round($eachLine->qty + $lineItems[$index]['qty'], 2);
-                $thisLine['amount'] = round($eachLine->amount_c + $lineItems[$index]['amount'], 2);
-                $lineItems[$index] = $thisLine;
-            } else {
-                // This is a new project or new description, so we need to add a new line
-                array_push($lineItems, $thisLine);
-            }
-
-            // update our lastProject and lastDescription to keep track of if we should add
-            $lastProject = $eachLine->project;
-            $lastDescription = $eachLine->description;
-
-        }
+        $lineItems = $invoice->lineItems;
 
         $data = [
-            'client' => $client,
+            'customer' => $customer,
             'invoice' => $invoice,
             'lineItems' => $lineItems,
         ];
@@ -98,7 +64,7 @@ class InvoiceController extends Controller
             $user->save();
         }
 
-        $invoice = Invoice::where('id', $id)->where('remainingBalance_c', '>0')->firstOrFail();
+        $invoice = Invoice::where('id', $id)->where('date_payment', '=')->firstOrFail();
 
         // pass $clientToken to the front-end
         $clientToken = $gateway->clientToken()->generate([
@@ -106,30 +72,47 @@ class InvoiceController extends Controller
         ]);
 
         $data = [
-            'invoiceNumber' => $invoice->number,
             'invoiceId' => $invoice->id,
-            'total' => $invoice->total_c,
-            'outstandingBalance' => $invoice->remainingBalance_c,
-            'clientToken' => $clientToken
+            'total' => $invoice->Total,
+            'clientToken' => $clientToken,
+            'usePayPal' => config('portal.payments.braintree.supports-paypal')
         ];
-        return Inertia::render('Invoice/Pay', $data);
+
+        // return a different view depending on if partial payments are allowed
+
+        if (config('portal.payments.partial-payments-allowed')){
+            return Inertia::render('Invoice/Pay', $data);
+        } else {
+            return Inertia::render('Invoice/PayFull', $data);
+        }
     }
 
     public function submitPayment(Request $request, string $id)
     {
         // get the invoice so we can make sure the payment amount is less than the remaining balance
         $invoice = Invoice::findOrFail($id);
-        $balance = $invoice->remainingBalance_c;
 
-        // Do basic validation
-        $request = $request->validate([
-            'paymentAmount' => 'required|numeric|min:1|max:' . $balance,
-            'nonce' => 'required',
-        ]);
+        if (config('portal.partial-payments-allowed')){
+            // Make sure payment amount is valid
+            $request = $request->validate([
+                'paymentAmount' => 'required|numeric|min:1|max:' . $invoice->Total,
+                'nonce' => 'required',
+            ]);
+
+            $paymentAmount = $request['paymentAmount'];
+        } else {
+            // Only full payments, so we don't have a payment amount
+            $request = $request->validate([
+                'nonce' => 'required',
+            ]);
+
+            $paymentAmount = $invoice->Total;
+        }
+
+
 
         // get the data from the request
         $nonce = $request['nonce'];
-        $paymentAmount = $request['paymentAmount'];
 
         // prepare the gateway
         $gateway = $this->getGateway();
@@ -147,7 +130,7 @@ class InvoiceController extends Controller
 
         if (!$result->success) {
             // There was an error processing
-            $error = \Illuminate\Validation\ValidationException::withMessages([
+            $error = ValidationException::withMessages([
                 'payment_error' => ['Error submitting payment: ' . $result->message],
             ]);
             throw $error;

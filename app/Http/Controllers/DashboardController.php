@@ -17,9 +17,9 @@ class DashboardController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $client = $user->client;
+        $customer = $user->customer;
 
-        $outInvoices = $client->outInvoices;
+        $outInvoices = $customer->outstandingInvoices;
 
         $client = "test";
         $data = [
@@ -33,8 +33,8 @@ class DashboardController extends Controller
     public function getPaidInvoices(Request $request)
     {
 
-        $clientId = Auth::user()->client_id;
-        $invoices = Invoice::where('paidOn', '*')->where('client_id', "=" . $clientId)->orderByDesc('date')->paginate(5);
+        $customerId = Auth::user()->customer_id;
+        $invoices = Invoice::where('date_payment', '*')->where('customer_id', "=" . $customerId)->orderByDesc('Sent On')->paginate(5);
         return $invoices;
     }
 }

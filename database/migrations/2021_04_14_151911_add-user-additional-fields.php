@@ -14,7 +14,7 @@ class AddUserAdditionalFields extends Migration
     public function up()
     {
         Schema::table('users', function(Blueprint $table) {
-            $table->string('client_id')->nullable();
+            $table->string('customer_id')->nullable();
             $table->integer('braintree_customer_id')->nullable();
         });
     }
@@ -28,7 +28,7 @@ class AddUserAdditionalFields extends Migration
     {
         Schema::table('users', function(Blueprint $table) {
             $table->dropColumn('braintree_customer_id');
-            $table->dropColumn('client_id');
+            $table->dropColumn('customer_id');
         });
     }
 }

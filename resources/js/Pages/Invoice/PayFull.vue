@@ -14,25 +14,11 @@
 
                     <template #form>
 
-                        <div v-if="step === 1">
-                            <div class="mt-4 text-gray-800 font-medium">Pay Invoice #{{ invoiceId }}</div>
-                            <div class="mt-4">Invoice Amount: {{formatCurrency(total)}}</div>
-
-                            <!-- Payment Amount -->
-                            <div class="mt-6">
-                                <jet-label for="paymentAmount" value="PaymentAmount"/>
-                                <currency-input
-                                    id="paymentAmount"
-                                    class="mt-1 block w-full"
-                                    v-model="paymentAmount"
-                                    type="text"
-                                />
-                                <jet-input-error :message="form.errors.paymentAmount" class="mt-2"/>
-                            </div>
-                        </div>
-
                         <!-- Payment Info -->
-                        <div v-if="step === 2" class="min-h-[14rem]">
+                        <div class="min-h-[14rem]">
+                            <div class="my-4 text-gray-800 font-medium">Pay Invoice #{{ invoiceId }}</div>
+                            <div class="my-4">Invoice Amount: {{formatCurrency(total)}}</div>
+
                             <div id="dropin-container"></div>
                             <jet-input-error :message="form.errors.payment_error" class="mt-2"/>
                             <jet-validation-errors class="mb-4" />
@@ -43,19 +29,8 @@
 
                     <template #actions>
 
-                        <div v-if="step === 1">
-                            <jet-button v-on:click="continueButton" :class="{ 'opacity-25': form.processing }"
-                                        :disabled="form.processing">
-                                Continue to Payment
-                            </jet-button>
-                        </div>
 
-                        <div v-if="step === 2" class="w-full">
-                            <jet-secondary-button class="float-left" v-on:click="backButton"
-                                                  :class="{ 'opacity-25': form.processing }"
-                                                  :disabled="form.processing">
-                                Back
-                            </jet-secondary-button>
+                        <div class="w-full">
                             <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                 Pay {{ formatCurrency(paymentAmount) }}
                             </jet-button>
@@ -101,7 +76,6 @@ export default {
     props: {
         invoiceId: String,
         total: Number,
-        outstandingBalance: Number,
         clientToken: String,
         usePayPal: Boolean,
     },
@@ -124,13 +98,6 @@ export default {
     methods: {
         submitPayment: function () {
 
-            if(this.step === 1){
-                // we're still on step 1, so go to step 2 instead of continuing
-                // The user probably pressed return;
-                this.continueButton();
-                return;
-            }
-
             this.isProcessing = true;
 
             this.dropinInstance.requestPaymentMethod()
@@ -148,52 +115,36 @@ export default {
         },
         continueButton: function () {
 
-            // Check for payment amount errors
-            if (this.paymentAmount < 1){
-                this.form.errors.paymentAmount = "Payment amount must at least $1";
-                return false;
-            }
-
-            //Make sure they're not submitting over the maximum amount of the invoice
-            if(this.paymentAmount > this.outstandingBalance){
-                this.form.errors.paymentAmount = "Payment amount must not exceed outstanding balance."
-                return false;
-            }
-
             // payment amount seems ok
             this.step++;
 
             this.form.processing = true;
 
             this.$nextTick(function () {
-                let options = {};
-                if (this.usePayPal){
-                    // PayPal is supported
-                    options.paypal =  {
-                        flow: 'checkout',
-                        amount: this.paymentAmount,
-                        currency: 'USD',
-                    };
-                }
-                options.container = document.getElementById('dropin-container');
-                options.authorization = this.clientToken;
-                DropIn.create(options).then((dropinInstance) => {
-                    this.dropinInstance = dropinInstance;
-                    this.form.processing = false;
-                }).catch((error) => {
-                });
+
             });
 
 
         },
-        backButton: function () {
-            this.form.clearErrors()
-            this.step--;
-        }
     },
     mounted() {
 
-
+        let options = {};
+        if (this.usePayPal){
+            // PayPal is supported
+            options.paypal =  {
+                flow: 'checkout',
+                    amount: this.paymentAmount,
+                    currency: 'USD',
+            };
+        }
+        options.container = document.getElementById('dropin-container');
+        options.authorization = this.clientToken;
+        DropIn.create(options).then((dropinInstance) => {
+            this.dropinInstance = dropinInstance;
+            this.form.processing = false;
+        }).catch((error) => {
+        });
     },
 };
 </script>

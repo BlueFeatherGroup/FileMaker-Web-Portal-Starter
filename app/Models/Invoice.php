@@ -14,12 +14,12 @@ class Invoice extends FMModel
 
     protected $keyType = 'string';
 
-    // always add a where clause to finding invoices so that we only get invoices for the currently logged-in user
-    protected static function booted()
-    {
-        static::addGlobalScope(new BelongsToUserClientScope());
-        parent::booted();
-    }
+    protected $fieldMapping = [
+        'Date Payment' => 'date_payment',
+        'Invoice ID' => 'id',
+        'Tax Rate' => 'tax_rate',
+        'CUSTOMER ID MATCH FIELD' => 'customer_id',
+    ];
 
     public function lineItems(){
         return $this->hasMany(LineItem::class);

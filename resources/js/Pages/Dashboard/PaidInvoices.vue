@@ -18,21 +18,21 @@
                         <div>
                             <div class="">
                                 <inertia-link class="text-blue-500 hover:text-blue-600 underline text-sm font-medium"
-                                              :href="route('invoice.detail', invoice.id)">#{{ invoice.number }}
+                                              :href="route('invoice.detail', invoice.id)">#{{ invoice.id }}
                                 </inertia-link>
                             </div>
                             <div class=" text-xs text-gray-500">
-                                Date: {{ invoice.date }}
+                                Date: {{ invoice.Date }}
                             </div>
                         </div>
                         <div class="">
                             <div class="text-right">
-                                <div class="text-lg">{{ formatCurrency(invoice.total_c) }}</div>
+                                <div class="text-lg">{{ formatCurrency(invoice.Total) }}</div>
                             </div>
                         </div>
                         <div>
                             <div class=" text-sm text-gray-900 mt-4">
-                                {{ invoice.summary }}
+                                {{ invoice.Summary }}
                             </div>
                         </div>
                     </div>
@@ -88,22 +88,22 @@
                                             <div class="text-sm font-medium">
                                                 <inertia-link class="text-blue-500 underline"
                                                               :href="route('invoice.detail', invoice.id)">
-                                                    {{ invoice.number }}
+                                                    {{ invoice.id }}
                                                 </inertia-link>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-3 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        <div class="">{{ invoice.date }}</div>
+                                        <div class="">{{ invoice.Date }}</div>
                                     </td>
                                     <td class="px-3 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ invoice.summary }}
+                                        {{ invoice.Summary }}
                                     </td>
                                     <td class="px-3 md:px-6 py-4 whitespace-nowrap text-right">
-                                        <div>{{ formatCurrency(invoice.total_c) }}</div>
+                                        <div>{{ formatCurrency(invoice.Total) }}</div>
                                     </td>
                                     <td class="px-3 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                                        <div class="">{{ invoice.date }}</div>
+                                        <div class="">{{ invoice.Date }}</div>
                                     </td>
                                 </tr>
                                 </tbody>

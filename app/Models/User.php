@@ -27,7 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'client_id',
+        'customer_id',
     ];
 
     /**
@@ -61,8 +61,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function client()
+    public function customer()
     {
-        return new BelongsTo(Client::query(), $this, 'client_id', 'id', '');
+        return new BelongsTo(Customer::query(), $this, 'customer_id', 'id', '');
     }
 }
