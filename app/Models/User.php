@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use BlueFeather\EloquentFileMaker\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'client_id',
     ];
 
     /**
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'braintree_customer_id',
     ];
 
     /**
@@ -58,4 +60,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function client()
+    {
+        return new BelongsTo(Client::query(), $this, 'client_id', 'id', '');
+    }
 }

@@ -84,8 +84,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'portal@bluefeathergroup.com'),
+        'name' => env('MAIL_FROM_NAME', 'Blue Feather Client Portal'),
     ],
 
     /*
@@ -106,5 +106,9 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+
+    'to' =>[
+        'payment-alert' => env('PAYMENT_ALERT_TO'),
+    ]
 
 ];

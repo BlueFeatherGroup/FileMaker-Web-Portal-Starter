@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,7 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  array  $input
+     * @param array $input
      * @return \App\Models\User
      */
     public function create(array $input)
@@ -27,10 +28,25 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
         ])->validate();
 
+
+        // Try to link the user to a client if their client ID is null
+        $email = $input['email'];
+        $client = Client::where('email_contact', "\"" . $email . "\"")->orWhere('email_billing', "\"" . $email . "\"")->orWhere('email_billing_cc', "\"" . $email . "\"")->orWhere('email_billing_cc2', "\"" . $email . "\"")->first();
+
+        if ($client === null) {
+            // We couldn't match to a client
+            // set it to null and let the middleware handle them matching
+            $clientId = null;
+        } else {
+            $clientId = $client->id;
+        }
+
+
         return User::create([
             'name' => $input['name'],
-            'email' => $input['email'],
+            'email' => $email,
             'password' => Hash::make($input['password']),
+            'client_id' => $clientId,
         ]);
     }
 }

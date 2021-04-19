@@ -91,6 +91,17 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'fm-invoices' => [
+            'driver' => 'filemaker',
+            'host' => env('INVOICES_HOST', 'fms.mycompany.com'),
+            'database' => env('INVOICES_DATABASE', 'MyFileName'),
+            'username' => env('INVOICES_USERNAME', 'myusername'),
+            'password' => env('INVOICES_PASSWORD', ''),
+            'prefix' => env('INVOICES_PREFIX', ''),
+            'version' => env('INVOICES_VERSION', 'vLatest'),
+            'protocol' => env('INVOICES_PROTOCOL', 'https'),
+        ]
+
     ],
 
     /*
