@@ -35,16 +35,18 @@
                             </div>
                         </div>
                         <div class="text-sm text-gray-500">
-                            <div>Blue Feather Group, LLC</div>
-                            <div>9960 Timberstone Rd</div>
-                            <div>Johns Creek, GA 30022</div>
+                            <div>{{ company.name }}</div>
+                            <div>{{ company.address_1 }}</div>
+                            <div v-if="company.address_2">{{ company.address_2 }}</div>
+                            <div>{{ company.city }}, {{company.state}} {{company.postal_code}}</div>
+
                         </div>
                     </div>
                 </div>
 
 
                 <div class="my-5 float-right">
-                    Total: {{ formatCurrency(invoice.Total) }}
+                    Total: {{ formatCurrency(invoice.total) }}
                 </div>
 
                 <div class="">
@@ -85,6 +87,14 @@
                     </template>
                     </tbody>
                 </table>
+                <div v-if="hasTax" class="text-right text-sm text-gray-500 my-5">
+                <div class="">
+                    Subtotal: {{ formatCurrency(invoice.subtotal) }}
+                </div>
+                <div class="my-2">
+                    Tax @ {{invoice.tax_rate * 100 }}%:  {{ formatCurrency(invoice.tax) }}
+                </div>
+                </div>
                 <div class="text-right my-5 font-bold">
                     Total: {{ formatCurrency(invoice.total) }}
                 </div>
@@ -106,6 +116,9 @@ export default {
         invoice: Object,
         lineItems: Array,
         customer: Object,
+        hasTax: Boolean,
+        company: Object,
+        companyAddress: String,
     }
 };
 </script>

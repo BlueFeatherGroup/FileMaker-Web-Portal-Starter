@@ -34,6 +34,8 @@ class InvoiceController extends Controller
             'customer' => $customer,
             'invoice' => $invoice,
             'lineItems' => $lineItems,
+            'hasTax' => config('portal.payments.has-sales-tax'),
+            'company' => config('portal.company'),
         ];
 
         return Inertia::render('Invoice/InvoiceDetail', $data);

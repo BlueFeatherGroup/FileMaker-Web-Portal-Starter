@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'company' => [
+        'name' => 'Blue Feather',
+        'address_1' => '9960 Timberstone Rd',
+        'address_2' => null,
+        'city' => 'Johns Creek',
+        'state' => 'GA',
+        'postal_code' => '30022'
+    ],
+
     'account-link' => [
 
         /**
@@ -20,7 +29,7 @@ return [
 
     'payments' => [
 
-        'use-sales-tax' => true,
+        'has-sales-tax' => true,
 
         /**
          * Controls if users can make partial payments when paying an invoice
