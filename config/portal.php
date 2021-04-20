@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'account-link' => [
 
         /**
@@ -21,7 +20,11 @@ return [
 
     'payments' => [
 
-        /**  Controls if users can make partial payments when paying an invoice */
+        'use-sales-tax' => true,
+
+        /**
+         * Controls if users can make partial payments when paying an invoice
+         */
         'partial-payments-allowed' => false,
 
 

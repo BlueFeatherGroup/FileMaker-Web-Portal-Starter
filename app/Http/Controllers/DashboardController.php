@@ -34,7 +34,7 @@ class DashboardController extends Controller
     {
 
         $customerId = Auth::user()->customer_id;
-        $invoices = Invoice::where('date_payment', '*')->where('customer_id', "=" . $customerId)->orderByDesc('Sent On')->paginate(5);
+        $invoices = Invoice::where('paid_on', '*')->where('customer_id', "=" . $customerId)->orderByDesc('date')->paginate(5);
         return $invoices;
     }
 }

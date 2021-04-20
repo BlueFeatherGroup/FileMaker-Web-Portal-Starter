@@ -11,14 +11,18 @@ class Invoice extends FMModel
     use HasFactory;
 
     protected $connection = 'fm-invoices';
-
+    protected $layout = 'invoices';
     protected $keyType = 'string';
-
     protected $fieldMapping = [
-        'Date Payment' => 'date_payment',
-        'Invoice ID' => 'id',
-        'Tax Rate' => 'tax_rate',
         'CUSTOMER ID MATCH FIELD' => 'customer_id',
+        'Invoice ID' => 'id',
+        'Date' => 'date',
+        'Date Payment' => 'paid_on',
+        'Summary' => 'summary',
+        'Subtotal' => 'subtotal',
+        'Tax' => 'tax',
+        'Tax Rate' => 'tax_rate',
+        'Total' => 'total'
     ];
 
     public function lineItems(){

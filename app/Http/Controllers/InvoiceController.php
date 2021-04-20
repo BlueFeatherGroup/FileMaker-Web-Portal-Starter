@@ -64,7 +64,7 @@ class InvoiceController extends Controller
             $user->save();
         }
 
-        $invoice = Invoice::where('id', $id)->where('date_payment', '=')->firstOrFail();
+        $invoice = Invoice::where('id', $id)->where('paid_on', '=')->firstOrFail();
 
         // pass $clientToken to the front-end
         $clientToken = $gateway->clientToken()->generate([
@@ -73,7 +73,7 @@ class InvoiceController extends Controller
 
         $data = [
             'invoiceId' => $invoice->id,
-            'total' => $invoice->Total,
+            'total' => $invoice->total,
             'clientToken' => $clientToken,
             'usePayPal' => config('portal.payments.braintree.supports-paypal')
         ];

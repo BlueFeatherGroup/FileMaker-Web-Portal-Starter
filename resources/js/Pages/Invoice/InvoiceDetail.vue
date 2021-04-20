@@ -12,7 +12,7 @@
 
             <div class="justify-end flex my-5 gap-4 print:hidden mx-5 sm:mx-0">
                 <jet-secondary-button onclick="window.print();return false;">Print</jet-secondary-button>
-                <inertia-link v-if="!invoice.date_payment" :href="route('invoice.pay', invoice.id)">
+                <inertia-link v-if="!invoice.paid_on" :href="route('invoice.pay', invoice.id)">
                     <jet-button>Pay Now</jet-button>
                 </inertia-link>
             </div>
@@ -31,7 +31,7 @@
                                 Invoice: {{ invoice.id }}
                             </div>
                             <div class="">
-                                Date: {{ invoice.Date }}
+                                Date: {{ invoice.date }}
                             </div>
                         </div>
                         <div class="text-sm text-gray-500">
@@ -50,9 +50,10 @@
                 <div class="">
                     <div>Bill To:</div>
                     <div class="mb-5 text-sm text-gray-500">
-                        <div>{{ customer.Company }}</div>
+                        <div>{{ customer.name }}</div>
                         <div>{{ customer.address_1 }}</div>
-                        <div>{{ customer.City }}, {{ customer.State }} 30022</div>
+                        <div v-if="customer.address_2">{{ customer.address_2 }}</div>
+                        <div>{{ customer.city }}, {{ customer.state }} {{customer.postal_code}}</div>
                     </div>
                 </div>
 
@@ -74,18 +75,18 @@
                         <tr>
 
                             <td class="pl-5 py-3">
-                                {{ lineItem.Item }}
+                                {{ lineItem.description }}
                             </td>
-                            <td class="text-right text-gray-500">{{ lineItem.Qty }}</td>
+                            <td class="text-right text-gray-500">{{ lineItem.qty }}</td>
                             <td class="text-right">{{ formatCurrency(lineItem.unit_price) }}</td>
-                            <td class="text-right">{{ formatCurrency(lineItem.Amount) }}</td>
+                            <td class="text-right">{{ formatCurrency(lineItem.extended_price) }}</td>
 
                         </tr>
                     </template>
                     </tbody>
                 </table>
                 <div class="text-right my-5 font-bold">
-                    Total: {{ formatCurrency(invoice.Total) }}
+                    Total: {{ formatCurrency(invoice.total) }}
                 </div>
             </div>
             <div class="py-5 print:hidden"></div>
@@ -105,8 +106,6 @@ export default {
         invoice: Object,
         lineItems: Array,
         customer: Object,
-        lastProject: null,
-        lastDescription: null,
     }
 };
 </script>

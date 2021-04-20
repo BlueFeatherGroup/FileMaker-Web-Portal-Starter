@@ -14,7 +14,7 @@ class AccountController extends Controller
     public function showLinkAccount(){
 
         // check if they're already linked
-        if (Auth::user()->client_id){
+        if (Auth::user()->customer_id){
             // user is already linked to a client
             // redirect them to the dashboard
             return redirect()->route('dashboard');
@@ -32,7 +32,7 @@ class AccountController extends Controller
         ]);
 
         // find an invoice by number and amount
-        $invoice = Invoice::where('number', "=" . $validated['invoice'])->where('total_c', $validated['amount'])->first();
+        $invoice = Invoice::where('id', "=" . $validated['invoice'])->where('total', $validated['amount'])->first();
 
 
         if (!$invoice) {
@@ -47,7 +47,7 @@ class AccountController extends Controller
 
         // we found an invoice
         $user = Auth::user();
-        $user->client_id = $invoice->client_id;
+        $user->customer_id = $invoice->customer_id;
         $user->save();
 
 

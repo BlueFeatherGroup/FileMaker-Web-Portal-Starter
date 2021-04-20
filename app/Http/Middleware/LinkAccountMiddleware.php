@@ -20,7 +20,7 @@ class LinkAccountMiddleware
         // Only redirect if the portal is configured to allow matching accounts by invoice
         if (config('portal.allow-invoice-match')){
             $user = $request->user();
-            if ($user && $user->client_id === null){
+            if ($user && $user->customer_id === null){
                 return redirect()->route('user.link-account');
             }
         }
