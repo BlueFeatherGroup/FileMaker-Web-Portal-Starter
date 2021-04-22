@@ -45,7 +45,7 @@
 
                         <div v-if="step === 1">
                             <jet-button v-on:click="continueButton" :class="{ 'opacity-25': form.processing }"
-                                        :disabled="form.processing">
+                                        :disabled="form.processing" :type="button">
                                 Continue to Payment
                             </jet-button>
                         </div>
@@ -155,8 +155,8 @@ export default {
             }
 
             //Make sure they're not submitting over the maximum amount of the invoice
-            if(this.paymentAmount > this.outstandingBalance){
-                this.form.errors.paymentAmount = "Payment amount must not exceed outstanding balance."
+            if(this.paymentAmount > this.total){
+                this.form.errors.paymentAmount = "Payment amount must not exceed invoice amount."
                 return false;
             }
 

@@ -34,9 +34,24 @@ return [
         /**
          * Controls if users can make partial payments when paying an invoice
          */
-        'partial-payments-allowed' => false,
+        'partial-payments-allowed' => true,
 
+        /**
+         * Select which payment gateway to use
+         * Either 'stripe' or 'braintree'
+         */
+        'gateway' => 'stripe',
 
+        /**
+         * Configure Stripe gateway information
+         */
+        'stripe' => [
+
+        ],
+
+        /**
+         * Configure Braintree gateway information
+         */
         'braintree' => [
 
             /**
@@ -44,8 +59,18 @@ return [
              * You must have PayPal configured in your BrainTree account for this to work
              */
             'supports-paypal' => false,
-        ]
+        ],
+
+        'payment-alert-to' => env('PAYMENT_ALERT_TO', 'me@mycompany.com'),
+
+
+        /**
+         * The name of the script which is triggered when a payment is received
+        */
+        'payment-received-script' => 'PayInvoice',
+        /**
+         * The name of the layout to start on when calling the payment received script
+        */
+        'payment-received-layout' => 'invoices'
     ]
-
-
 ];

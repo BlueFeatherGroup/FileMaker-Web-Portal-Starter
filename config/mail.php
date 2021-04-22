@@ -106,9 +106,4 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
-
-    'to' =>[
-        'payment-alert' => env('PAYMENT_ALERT_TO'),
-    ]
-
 ];

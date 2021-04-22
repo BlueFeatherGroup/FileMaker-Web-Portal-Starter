@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "aws/aws-sdk-php": "^3.178",
         "bluefeather/eloquent-filemaker": "^0.0.11",
         "braintree/braintree_php": "^6.0",
@@ -17,8 +18,8 @@
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
-        "tightenco/ziggy": "^1.1",
-      "ext-json": "*"
+        "stripe/stripe-php": "^7.77",
+        "tightenco/ziggy": "^1.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

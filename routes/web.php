@@ -36,6 +36,8 @@ Route::middleware(['auth:sanctum', 'verified', 'client.linked'])->group(function
     Route::get('/invoice/{id}', [InvoiceController::class, 'get'])->name('invoice.detail');
     Route::get('/invoice/{id}/pay', [InvoiceController::class, 'pay'])->name('invoice.pay');
     Route::post('/invoice/{id}/pay', [InvoiceController::class, 'submitPayment'])->name('invoice.pay.submit');
+    Route::post('/invoice/{id}/stripe/getClientSecret', [InvoiceController::class, 'getStripeClientSecret'])->name('invoice.pay.stripe.get-client-secret');
+
     Route::get('/invoice/{id}/pay/success', [InvoiceController::class, 'success'])->name('invoice.pay.success');
 });
 
@@ -43,4 +45,5 @@ Route::middleware(['web', 'verified', 'auth:sanctum'])->group(function(){
     Route::get('/user/account-link', [AccountController::class, 'showLinkAccount'])->name('user.link-account');
     Route::post('/user/account-link', [AccountController::class, 'storeLinkAccount'])->name('user.link-account.store');
 });
+
 

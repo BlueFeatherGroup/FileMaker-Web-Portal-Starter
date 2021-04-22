@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.8.7",
-        "@inertiajs/inertia-vue3": "^0.3.13",
+        "@inertiajs/inertia-vue3": "^0.3.14",
         "@inertiajs/progress": "^0.2.4",
         "@tailwindcss/forms": "^0.3.2",
         "@tailwindcss/typography": "^0.4.0",
@@ -19,15 +19,16 @@
         "autoprefixer": "^10.2.5",
         "axios": "^0.21",
         "browser-sync-webpack-plugin": "^2.3.0",
-        "laravel-mix": "^6.0.6",
+        "laravel-mix": "^6.0.18",
         "lodash": "^4.17.19",
-        "postcss": "^8.2.10",
+        "postcss": "^8.2.12",
         "postcss-import": "^14.0.1",
         "tailwindcss": "^2.0.1",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
+        "@stripe/stripe-js": "^1.13.2",
         "braintree-web-drop-in": "^1.27.0"
     }
 }
