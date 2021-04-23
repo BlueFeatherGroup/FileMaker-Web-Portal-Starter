@@ -19,16 +19,7 @@ export default {
                 if (this.isInputActive) {
                     // Cursor is inside the input field. unformat display value for user
                     // check if we should set the value to have decimal places or not
-                    if (this.modelValue === '') {
                         return this.modelValue;
-                    }
-                    if (this.modelValue % 1 > 0) {
-                        // there is a decimal value
-                        return this.modelValue.toFixed(2);
-                    } else {
-                        // There is no decimal value
-                        return this.modelValue.toString();
-                    }
                 } else {
                     // User is not modifying now. Format display value for user interface
 
@@ -38,26 +29,35 @@ export default {
                     }
 
                     // otherwise display it nicely formatted
-                    return "$ " + this.modelValue.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,");
+                    let modelValue = parseFloat(this.modelValue);
+                    return "$ " + modelValue.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,");
                 }
             },
             set: function (modifiedValue) {
                 // Recalculate value after ignoring "$" and "," in user input
-                let newValue = parseFloat(modifiedValue.replace(/[^\d\.]/g, ""));
-                // Ensure that it is not NaN
-                if (isNaN(newValue)) {
-                    newValue = '';
+                let newValue = modifiedValue.replace(/[^\d\.]/g, "");
+
+                // Handle the value if it's not empty
+                if (newValue !== '') {
+                    let decimalCount = this.countDecimals(parseFloat(newValue));
+                    if (decimalCount > 2){
+                        newValue = parseFloat(newValue).toFixed(2);
+                    } else {
+                        newValue = newValue.toString();
+                    }
                 }
+
                 // Note: we cannot set this.value as it is a "prop". It needs to be passed to parent component
                 // $emit the event so that parent component gets it
+
                 this.$emit('update:modelValue', newValue);
             }
         }
     },
     methods: {
-        countDecimals: function () {
-            if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
-            return this.toString().split(".")[1].length || 0;
+        countDecimals: function (value) {
+            if (Math.floor(value) === value) return 0;
+            return value.toString().split(".")[1].length || 0;
         }
     }
 };

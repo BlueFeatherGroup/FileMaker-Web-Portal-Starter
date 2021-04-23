@@ -20,9 +20,19 @@ createApp({
         methods: {
             route,
             formatCurrency(value) {
+
                 if (typeof value !== "number") {
-                    return value;
+                    let floatVal = parseFloat(value);
+
+                    // we couldn't parse it, so return the original value
+                    if (isNaN(floatVal)){
+                        return value;
+                    }
+
+                    // use the floatVal as our new value
+                    value = floatVal;
                 }
+
                 var formatter = new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: 'USD',
