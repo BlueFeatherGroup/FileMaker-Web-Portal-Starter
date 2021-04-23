@@ -24,7 +24,7 @@ This portal comes with some pre-built features for basic invoice payments online
 * Display survey results
 * Provide access or collect information from employees who don't normally use FileMaker
 
-#### Here are some of the features this starter solution comes with out of the box:
+#### Here are some of the features included with this starter solution out of the box:
 - Private data behind user logins, including two-factor authentication
 - Linking of users to customer records in your FileMaker database via email matching or (optionally) invoice information
 - Easy configuration to connect to your FileMaker database, preconfigured to work with the Invoices starter solution as an example
@@ -133,7 +133,7 @@ Configuration options configuration:
 
 ## Configuration Complete!
 
-I know it's been a lot to read through, but that's all the options and configuration for this starter solution! If you've set the right privilges for your FileMaker database login and have all the right fields on your layout you should now be able to create an account and log in to see data from your FileMaker database!
+I know it's been a lot to read through, but that's all the options and configuration for this starter solution! If you've set the right privileges for your FileMaker database login and have all the right fields on your layout you should now be able to create an account and log in to see data from your FileMaker database!
 
 ## Technologies used in this solution
 
