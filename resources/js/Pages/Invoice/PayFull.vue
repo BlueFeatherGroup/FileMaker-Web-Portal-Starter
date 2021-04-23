@@ -129,17 +129,20 @@ export default {
     },
     mounted() {
 
-        let options = {};
-        if (this.usePayPal){
+        let options = {
+            card: {vault: {vaultCard: true, allowVaultCardOverride: true}},
+            vaultManager: true,
+            authorization: this.clientToken,
+        };
+        if (this.usePayPal) {
             // PayPal is supported
-            options.paypal =  {
+            options.paypal = {
                 flow: 'checkout',
-                    amount: this.paymentAmount,
-                    currency: 'USD',
+                amount: this.paymentAmount,
+                currency: 'USD',
             };
         }
         options.container = document.getElementById('dropin-container');
-        options.authorization = this.clientToken;
         DropIn.create(options).then((dropinInstance) => {
             this.dropinInstance = dropinInstance;
             this.form.processing = false;
