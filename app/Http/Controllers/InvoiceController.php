@@ -170,28 +170,6 @@ class InvoiceController extends Controller
     }
 
 
-    public function success()
-    {
-
-        $paymentAmount = 100;
-        $paymentMethod = "Visa x-1234";
-        $transactionId = "asdfkhds";
-
-        $date = Carbon::now()->format('M j, Y');
-        $data = [
-            'paymentAmount' => $paymentAmount,
-            'paymentMethod' => $paymentMethod,
-            'paymentDate' => $date,
-            'transactionId' => $transactionId,
-        ];
-
-        //Mail::to(Auth::user()->email)->send(new Receipt(number_format($paymentAmount, 2), $paymentMethod, $transactionId, $date));
-
-        return Inertia::render('Invoice/Success', $data);
-
-    }
-
-
     protected function getBraintreeGateway()
     {
         return new Gateway([

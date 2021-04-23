@@ -34,19 +34,19 @@ return [
         /**
          * Controls if users can make partial payments when paying an invoice
          */
-        'partial-payments-allowed' => true,
+        'partial-payments-allowed' => false,
 
         /**
          * Select which payment gateway to use
          * Either 'stripe' or 'braintree'
          */
-        'gateway' => 'stripe',
+        'gateway' => 'braintree',
 
         /**
          * Configure Stripe gateway information
          */
         'stripe' => [
-
+            // nothing right now...
         ],
 
         /**
