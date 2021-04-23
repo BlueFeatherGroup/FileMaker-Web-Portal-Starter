@@ -30,7 +30,7 @@ This portal comes with some pre-built features for basic invoice payments online
 - Easy configuration to connect to your FileMaker database, preconfigured to work with the Invoices starter solution as an example
 - Show paid and unpaid invoices with pagination
 - Printable invoice view
-- Support for taking credit card and PayPal payments through Braintree
+- Support for taking credit card and PayPal payments through Braintree or Stripe
 - Simple toggles to either allow partial payments or require full payments
 
 ## Getting Help
@@ -85,7 +85,7 @@ If you decide to use SQLite be aware that a database.sqlite file will be stored 
 
 ### Set up your .env
 
-The .env file is the configuration for a particular deployment. Copy the `.env.example` file to `.env` and modify the values in there to suit your configuration. You'll need to enter information for your database, FileMaker connection, and Braintree account information.
+The .env file is the configuration for a particular deployment. Copy the `.env.example` file to `.env` and modify the values in there to suit your configuration. You'll need to enter information for your database, FileMaker connection, and Braintree/Stripe account information.
 
 You'll also need to generate a new app key, which is used for encryption. Run the following command to generate a new app key
 
