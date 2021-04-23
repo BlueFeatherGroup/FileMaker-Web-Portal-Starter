@@ -318,10 +318,10 @@ message;
         // get the invoice so we can make sure the payment amount is less than the remaining balance
         $invoice = Invoice::findOrFail($id);
 
-        if (config('portal.partial-payments-allowed')) {
+        if (config('portal.payments.partial-payments-allowed')) {
             // Make sure payment amount is valid
             $request = $request->validate([
-                'paymentAmount' => 'required|numeric|min:1|max:' . $invoice->Total,
+                'paymentAmount' => 'required|numeric|min:1|max:' . $invoice->total,
                 'nonce' => 'required',
             ]);
 
@@ -332,7 +332,7 @@ message;
                 'nonce' => 'required',
             ]);
 
-            $paymentAmount = $invoice->Total;
+            $paymentAmount = $invoice->total;
         }
 
 

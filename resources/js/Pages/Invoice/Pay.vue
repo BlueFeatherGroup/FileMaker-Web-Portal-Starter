@@ -16,7 +16,7 @@
 
                         <div v-if="step === 1">
                             <div class="mt-4 text-gray-800 font-medium">Pay Invoice #{{ invoiceId }}</div>
-                            <div class="mt-4">Invoice Amount: {{formatCurrency(total)}}</div>
+                            <div class="mt-4">Invoice Amount: {{ formatCurrency(total) }}</div>
 
                             <!-- Payment Amount -->
                             <div class="mt-6">
@@ -35,7 +35,7 @@
                         <div v-if="step === 2" class="min-h-[14rem]">
                             <div id="dropin-container"></div>
                             <jet-input-error :message="form.errors.payment_error" class="mt-2"/>
-                            <jet-validation-errors class="mb-4" />
+                            <jet-validation-errors class="mb-4"/>
 
                         </div>
 
@@ -79,7 +79,7 @@ import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import JetLabel from '@/Jetstream/Label';
 import JetInputError from '@/Jetstream/InputError';
 import CurrencyInput from "@/Pages/Components/CurrencyInput";
-import JetValidationErrors from '@/Jetstream/ValidationErrors'
+import JetValidationErrors from '@/Jetstream/ValidationErrors';
 import {useForm} from '@inertiajs/inertia-vue3';
 import DropIn from 'braintree-web-drop-in';
 
@@ -124,7 +124,7 @@ export default {
     methods: {
         submitPayment: function () {
 
-            if(this.step === 1){
+            if (this.step === 1) {
                 // we're still on step 1, so go to step 2 instead of continuing
                 // The user probably pressed return;
                 this.continueButton();
@@ -149,14 +149,14 @@ export default {
         continueButton: function () {
 
             // Check for payment amount errors
-            if (this.paymentAmount < 1){
+            if (this.paymentAmount < 1) {
                 this.form.errors.paymentAmount = "Payment amount must at least $1";
                 return false;
             }
 
             //Make sure they're not submitting over the maximum amount of the invoice
-            if(this.paymentAmount > this.total){
-                this.form.errors.paymentAmount = "Payment amount must not exceed invoice amount."
+            if (this.paymentAmount > this.total) {
+                this.form.errors.paymentAmount = "Payment amount must not exceed invoice amount.";
                 return false;
             }
 
@@ -166,17 +166,20 @@ export default {
             this.form.processing = true;
 
             this.$nextTick(function () {
-                let options = {};
-                if (this.usePayPal){
+                let options = {
+                    card: {vault: {vaultCard: true, allowVaultCardOverride: true}},
+                    vaultManager: true,
+                    authorization: this.clientToken,
+                };
+                if (this.usePayPal) {
                     // PayPal is supported
-                    options.paypal =  {
+                    options.paypal = {
                         flow: 'checkout',
                         amount: this.paymentAmount,
                         currency: 'USD',
                     };
                 }
                 options.container = document.getElementById('dropin-container');
-                options.authorization = this.clientToken;
                 DropIn.create(options).then((dropinInstance) => {
                     this.dropinInstance = dropinInstance;
                     this.form.processing = false;
@@ -187,7 +190,7 @@ export default {
 
         },
         backButton: function () {
-            this.form.clearErrors()
+            this.form.clearErrors();
             this.step--;
         }
     },
