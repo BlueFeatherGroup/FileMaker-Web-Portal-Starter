@@ -119,10 +119,13 @@ LineItem
 
 You'll need to adjust the features of the sample portal to match what you want to have enabled. The configuration options are documented and controlled through the `/config/portal.php` file.
 
-Some options you may want to configure:
+Configuration options configuration:
 
-* Enter your company's name and address
-* Fields which should be searched against to match email addresses
+* Your company's name and address
+* Select Braintree or Stripe for payments (defaults to Braintree)
+* Payment alert email delivery address
+* Payment success FileMaker script name and layout
+* Fields which should be searched against to match customers by email addresses
 * Allow users to link logins to customers in your database by matching invoice numbers and amounts if their email isn't already in your system
 * Allow partial payments of invoices
 * Show/hide tax fields on invoices

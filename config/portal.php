@@ -65,12 +65,16 @@ return [
 
 
         /**
-         * The name of the script which is triggered when a payment is received
+         * The name of the script which is triggered when a payment is received.
+         * This script will receive the invoice id, payment amount, and transaction id as JSON parameters
+         * This script should record the payment in your database
         */
         'payment-received-script' => 'PayInvoice',
         /**
          * The name of the layout to start on when calling the payment received script
+         * A layout is required when calling scripts.
+         * It is good to use a blank layout if possible and then have your script run from there.
         */
-        'payment-received-layout' => 'invoices'
+        'payment-received-layout' => 'blank'
     ]
 ];
