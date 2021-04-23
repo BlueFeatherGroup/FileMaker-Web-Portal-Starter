@@ -204,8 +204,13 @@ class InvoiceController extends Controller
 
     public function stripeWebhook(Request $request)
     {
-        // Set your secret key. Remember to switch to your live secret key in production.
-        // See your keys here: https://dashboard.stripe.com/apikeys
+
+        // return a 404 if stripe isn't configured
+        if (config('portal.payments.gateway') !== 'stripe') {
+            abort(404);
+        }
+
+        // Set the Stripe API key
         Stripe::setApiKey(config('stripe.secret_key', env('STRIPE_SECRET_KEY')));
 
         $payload = @file_get_contents('php://input');
@@ -240,7 +245,7 @@ class InvoiceController extends Controller
                 $invoiceId = $paymentIntent->metadata['invoiceId'];
                 $customerId = $paymentIntent->metadata['customerId'];
                 $customer = Customer::find($customerId);
-                $this->recordPaymentAndSendReceipt($customer, $invoiceId, $email, $amount, $cardBrand, $transactionId);
+                $this->recordPaymentAndSendReceipt($customer, $invoiceId, $email, $amount, $cardBrand . " x-" . $cardLastFour, $transactionId);
                 break;
             case 'payment_method.attached':
 //                $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
@@ -399,6 +404,10 @@ message;
 
     public function getStripeClientSecret(Request $request, $id)
     {
+        // return a 404 if stripe isn't configured
+        if (config('portal.payments.gateway') !== 'stripe') {
+            abort(404);
+        }
 
         $invoice = Invoice::findOrFail($id);
 
