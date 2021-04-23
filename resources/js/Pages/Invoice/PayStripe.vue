@@ -14,7 +14,7 @@
 
                     <template #form>
 
-                        <div v-if="step === 1">
+                        <div v-show="step === 1">
                             <div class="mt-4 text-gray-800 font-medium">Pay Invoice #{{ invoiceId }}</div>
                             <div class="mt-4">Invoice Amount: {{ formatCurrency(total) }}</div>
 
@@ -32,10 +32,8 @@
                         </div>
 
                         <!-- Payment Info -->
-                        <div v-if="step === 2" class="min-h-[14rem]">
+                        <div v-show="step === 2" class="min-h-[14rem]">
                             <div class="my-4 text-gray-800 font-medium">Pay Invoice #{{ invoiceId }}</div>
-                            <div class="my-4">Invoice Amount: {{ formatCurrency(total) }}</div>
-
                             <jet-input-error :message="form.errors.payment_error" class="mt-2"/>
                             <jet-validation-errors class="mb-4"/>
 

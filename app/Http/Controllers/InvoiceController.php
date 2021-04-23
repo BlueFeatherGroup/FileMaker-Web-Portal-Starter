@@ -227,7 +227,7 @@ class InvoiceController extends Controller
             exit();
         }
 
-// Handle the event
+        // Handle the event
         switch ($event->type) {
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
@@ -240,8 +240,6 @@ class InvoiceController extends Controller
                 $invoiceId = $paymentIntent->metadata['invoiceId'];
                 $customerId = $paymentIntent->metadata['customerId'];
                 $customer = Customer::find($customerId);
-
-
                 $this->recordPaymentAndSendReceipt($customer, $invoiceId, $email, $amount, $cardBrand, $transactionId);
                 break;
             case 'payment_method.attached':
@@ -399,8 +397,10 @@ message;
         return Inertia::render('Invoice/Success', $data);
     }
 
-    public function getStripeClientSecret(Request $request, Invoice $invoice)
+    public function getStripeClientSecret(Request $request, $id)
     {
+
+        $invoice = Invoice::findOrFail($id);
 
         $amount = $request->amount;
         $secret = $this->getClientSecretForPayment($invoice, $amount);
