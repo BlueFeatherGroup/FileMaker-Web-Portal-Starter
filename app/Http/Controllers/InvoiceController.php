@@ -194,7 +194,7 @@ class InvoiceController extends Controller
         $payload = @file_get_contents('php://input');
         $sig_header = $request->header('stripe-signature');
 
-        $endpoint_secret = "whsec_nQbPUcBkQTeK0CZLR3sf5seV6uQcsGLI";
+        $endpoint_secret = config('portal.payments.stripe.webhook-secret');
 
         try {
             $event = Webhook::constructEvent(

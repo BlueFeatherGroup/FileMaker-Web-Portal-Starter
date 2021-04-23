@@ -47,6 +47,7 @@ return [
          */
         'stripe' => [
             // nothing right now...
+            'webhook-secret' => env('STRIPE_WEBHOOK_SECRET', '')
         ],
 
         /**
