@@ -33,8 +33,7 @@ class DashboardController extends Controller
     public function getPaidInvoices(Request $request)
     {
 
-        $customerId = Auth::user()->customer_id;
-        $invoices = Invoice::where('paid_on', '*')->where('customer_id', "=" . $customerId)->orderByDesc('date')->paginate(5);
+        $invoices = Invoice::where('paid_on', '*')->orderByDesc('date')->paginate(5);
         return $invoices;
     }
 }

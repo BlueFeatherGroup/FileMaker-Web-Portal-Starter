@@ -16,8 +16,6 @@ class BelongsToUserClientScope implements Scope
     {
         // apply a where clause to make sure the object belongs to the user's client by searching the client_id column
         $clientId = Auth::user()->client_id;
-        if ($clientId) {
-            $builder->where('client_id', "=" . $clientId);
-        }
+        $builder->where('client_id', "=" . $clientId);
     }
 }

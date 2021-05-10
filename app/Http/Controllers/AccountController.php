@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Scopes\BelongsToUserClientScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -32,7 +33,7 @@ class AccountController extends Controller
         ]);
 
         // find an invoice by number and amount
-        $invoice = Invoice::where('id', "=" . $validated['invoice'])->where('total', $validated['amount'])->first();
+        $invoice = Invoice::withoutGlobalScope(BelongsToUserClientScope::class)->where('id', "=" . $validated['invoice'])->where('total', $validated['amount'])->first();
 
 
         if (!$invoice) {
