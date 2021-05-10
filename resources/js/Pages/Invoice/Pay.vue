@@ -34,7 +34,6 @@
                         <!-- Payment Info -->
                         <div v-if="step === 2" class="min-h-[14rem]">
                             <div id="dropin-container"></div>
-                            <jet-input-error :message="form.errors.payment_error" class="mt-2"/>
                             <jet-validation-errors class="mb-4"/>
 
                         </div>
@@ -115,8 +114,8 @@ export default {
     },
     data() {
         return {
-            isProcessing: Boolean,
-            dropinInstance: Object,
+            isProcessing: false,
+            dropinInstance: null,
             paymentAmount: parseFloat(this.total),
             step: 1,
         };
@@ -165,6 +164,9 @@ export default {
 
             this.form.processing = true;
 
+            // clear any errors from a previous attempt
+            this.$page.props.errors = {};
+
             this.$nextTick(function () {
                 let options = {
                     card: {vault: {vaultCard: true, allowVaultCardOverride: true}},
@@ -179,11 +181,19 @@ export default {
                         currency: 'USD',
                     };
                 }
-                options.container = document.getElementById('dropin-container');
+
+                // v-if content can be cached on a SPA, so the DOM changes from loading a previous DropIn instance may still be there
+                // clear out the container so we can make a fresh DropIn
+                // The container seems to preserve its contents in prod because of the v-if, even though it doesn't in dev
+                let container = document.getElementById('dropin-container');
+                container.innerHTML = ''
+
+                options.container = container
                 DropIn.create(options).then((dropinInstance) => {
                     this.dropinInstance = dropinInstance;
                     this.form.processing = false;
                 }).catch((error) => {
+                    console.error("Error building BrainTree DropIn: " + error);
                 });
             });
 
