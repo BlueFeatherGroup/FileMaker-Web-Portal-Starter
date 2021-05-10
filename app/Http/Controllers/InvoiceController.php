@@ -89,8 +89,23 @@ class InvoiceController extends Controller
 
     }
 
-    protected function getClientSecretForPayment($invoice, $amount)
+    protected function getClientSecretForPayment(Request $request, Invoice $invoice, $amount)
     {
+        // check and make sure this amount is valid for this invoice
+
+        if (config('portal.payments.partial-payments-allowed')) {
+            // partial payments are allowed
+            // Make sure payment amount is valid
+            $request = $request->validate([
+                'amount' => 'required|numeric|min:1|max:' . $invoice->total,
+            ]);
+
+            $amount = $request['paymentAmount'];
+        } else {
+            // Only full payments are allowed, so we know what the payment amount will be
+            $amount = $invoice->total;
+        }
+
 
         Stripe::setApiKey(config('stripe.secret_key', env('STRIPE_SECRET_KEY')));
 
