@@ -8,7 +8,7 @@
         "php": "^7.3|^8.0",
         "ext-json": "*",
         "aws/aws-sdk-php": "^3.178",
-        "bluefeather/eloquent-filemaker": "^0.0.11",
+        "bluefeather/eloquent-filemaker": "0.0.*",
         "braintree/braintree_php": "^6.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
