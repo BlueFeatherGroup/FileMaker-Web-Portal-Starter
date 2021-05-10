@@ -103,7 +103,7 @@
                                         <div>{{ formatCurrency(invoice.total) }}</div>
                                     </td>
                                     <td class="px-3 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                                        <div class="">{{ invoice.date }}</div>
+                                        <div class="">{{ invoice.paid_on }}</div>
                                     </td>
                                 </tr>
                                 </tbody>
