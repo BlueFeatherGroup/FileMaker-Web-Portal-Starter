@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
         $customer = $user->customer;
 
-        $outInvoices = $customer->outstandingInvoices;
+        $outInvoices = $customer->outstandingInvoices()->orderByDesc('date')->get();
 
         $client = "test";
         $data = [
