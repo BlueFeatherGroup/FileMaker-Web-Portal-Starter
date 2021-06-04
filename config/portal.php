@@ -34,13 +34,13 @@ return [
         /**
          * Controls if users can make partial payments when paying an invoice
          */
-        'partial-payments-allowed' => false,
+        'partial-payments-allowed' => env('PAYMENT_PARTIAL_ALLOWED', false),
 
         /**
          * Select which payment gateway to use
          * Either 'stripe' or 'braintree'
          */
-        'gateway' => 'braintree',
+        'gateway' => env('PAYMENT_GATEWAY', 'braintree'),
 
         /**
          * Configure Stripe gateway information
