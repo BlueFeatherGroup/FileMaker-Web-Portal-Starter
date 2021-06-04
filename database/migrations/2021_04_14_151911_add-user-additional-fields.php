@@ -15,7 +15,7 @@ class AddUserAdditionalFields extends Migration
     {
         Schema::table('users', function(Blueprint $table) {
             $table->string('customer_id')->nullable();
-            $table->integer('braintree_customer_id')->nullable();
+            $table->bigInteger('braintree_customer_id')->nullable();
         });
     }
 
