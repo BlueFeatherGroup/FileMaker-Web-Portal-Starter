@@ -89,26 +89,14 @@ class InvoiceController extends Controller
 
     }
 
-    protected function getClientSecretForPayment(Request $request, Invoice $invoice, $amount)
+    protected function getClientSecretForPayment(Invoice $invoice, $amount)
     {
         // check and make sure this amount is valid for this invoice
-
-        if (config('portal.payments.partial-payments-allowed')) {
-            // partial payments are allowed
-            // Make sure payment amount is valid
-            $request = $request->validate([
-                'amount' => 'required|numeric|min:1|max:' . $invoice->total,
-            ]);
-
-            $amount = $request['paymentAmount'];
-        } else {
-            // Only full payments are allowed, so we know what the payment amount will be
-            $amount = $invoice->total;
-        }
 
 
         Stripe::setApiKey(config('stripe.secret_key', env('STRIPE_SECRET_KEY')));
 
+        /** @var User $user */
         $user = Auth::user();
         $intent = PaymentIntent::create([
             // amount is multiplied by 100 since they don't use decimals
@@ -404,7 +392,20 @@ message;
 
         $invoice = Invoice::findOrFail($id);
 
-        $amount = $request->amount;
+        // validate payment amount
+        if (config('portal.payments.partial-payments-allowed')) {
+            // partial payments are allowed
+            // Make sure payment amount is valid
+            $request = $request->validate([
+                'amount' => 'required|numeric|min:1|max:' . $invoice->total,
+            ]);
+
+            $amount = $request['amount'];
+        } else {
+            // Only full payments are allowed, so we know what the payment amount will be
+            $amount = $invoice->total;
+        }
+
         $secret = $this->getClientSecretForPayment($invoice, $amount);
 
         $data = [
